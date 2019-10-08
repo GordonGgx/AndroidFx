@@ -1,7 +1,5 @@
 package similar.core;
 
-import javafx.animation.Animation;
-import javafx.animation.FadeTransition;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -9,13 +7,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import similar.data.Intent;
 import similar.utils.ErrorHandler;
 
 import java.io.IOException;
 
-public class Activity extends Context {
+public class Activity extends Context{
 
     public static final int ACTIVITY_SINGLE_TASK=1;
     public static final int ACTIVITY_SINGLE_TOP=2;
@@ -27,9 +24,6 @@ public class Activity extends Context {
 
     private Scene mScene;
 
-    private Animation inAnimation;
-    private Animation outAnimation;
-
     private ReadOnlyBooleanWrapper showing=new ReadOnlyBooleanWrapper(){
         private boolean oldVisible;
         @Override
@@ -40,31 +34,8 @@ public class Activity extends Context {
             }
             oldVisible=newVisible;
             if(newVisible){
-                Scene before=window.getScene();
-                if(before!=null){
-                    FadeTransition fadeIn = new FadeTransition(
-                            Duration.millis(500),
-                            before.getRoot());
-                    fadeIn.setFromValue(1.0);
-                    fadeIn.setToValue(0);
-                    fadeIn.setOnFinished(t -> {
-                        mScene.getRoot().setOpacity(0);
-                        window.setScene(mScene);
-                        FadeTransition fadeOut = new FadeTransition(
-                                Duration.millis(500),
-                                mScene.getRoot());
-                        fadeOut.setFromValue(0.1);
-                        fadeOut.setToValue(1);
-
-                        fadeOut.play();
-
-
-                    });
-                    fadeIn.play();
-                }else {
-                    window.setScene(mScene);
-                }
-
+                //显示当前的Activity
+                window.setScene(mScene);
                 onStart();
             }else {
                 onStop();
@@ -143,8 +114,9 @@ public class Activity extends Context {
             System.gc();
         }else {
             //当前栈内没有Activity，则退出应用
-           window.close();
+            window.close();
         }
+
     }
 
     protected  <T extends Parent>T findViewById(String id){
@@ -160,7 +132,9 @@ public class Activity extends Context {
         loader.setController(this);
         try {
             Parent parent = loader.load();
-            mScene=new Scene(parent,Color.WHITE);
+            Group topGroup=new Group();
+            topGroup.getChildren().add(parent);
+            mScene=new Scene(topGroup,Color.WHITE);
         } catch (IOException e) {
             ErrorHandler.get().show(e);
         }
@@ -187,12 +161,6 @@ public class Activity extends Context {
     }
 
     public void startActivity(int mode, Intent intent){
-        startActivity(mode,intent,null,null);
-    }
-
-    public void startActivity(int mode, Intent intent,Animation in,Animation out){
-        inAnimation=in;
-        outAnimation=out;
         ActivityManager activityManager=ActivityManager.instance();
         if(mode==ACTIVITY_SINGLE_TASK){
             activityManager.pushActivityBySingleTask(intent);
@@ -202,7 +170,6 @@ public class Activity extends Context {
             activityManager.pushActivityByStandard(intent);
         }
     }
-
 
     void setWindow(Stage stage){
         this.window=stage;
@@ -232,5 +199,4 @@ public class Activity extends Context {
     void hidden(){
         showing.setValue(false);
     }
-
 }

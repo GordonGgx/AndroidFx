@@ -12,9 +12,11 @@ public class Intent {
     private Map<String,Object> mMap=null;
 
     private Class<? extends Activity> aClass;
+    private Activity beforeActivity;
 
-    public Intent(Class<? extends Activity> clazz){
-        this.aClass=clazz;
+    public Intent(Activity current,Class<? extends Activity> launch){
+        this.aClass=launch;
+        this.beforeActivity=current;
     }
 
     public Intent putStringExtra(String key, String value){
@@ -72,6 +74,9 @@ public class Intent {
 
     public Class<? extends Activity> getActivityClass(){
         return aClass;
+    }
+    public Activity getBeforeActivity(){
+        return beforeActivity;
     }
 
 

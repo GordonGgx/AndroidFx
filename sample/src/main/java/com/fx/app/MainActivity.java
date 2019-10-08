@@ -41,7 +41,7 @@ public class MainActivity extends Activity implements TestPreload.SharedScene {
         getWindow().setTitle("场景切换动画测试");
         Button button=findViewById("btn");
         button.setOnAction(event -> {
-            startActivity(new Intent(SecondActivity.class));
+            startActivity(new Intent(this,SecondActivity.class));
         });
 
     }

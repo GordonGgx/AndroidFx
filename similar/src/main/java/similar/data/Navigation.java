@@ -18,7 +18,7 @@ public class Navigation {
         current=activity;
     }
 
-    public static Navigation of(Activity activity){
+    public static Navigation from(Activity activity){
         Objects.requireNonNull(activity);
         return new Navigation(activity);
     }
@@ -36,14 +36,14 @@ public class Navigation {
     }
 
     public void go(Class<? extends Activity> activity){
-        current.startActivity(Activity.ACTIVITY_STANDARD, new Intent(activity));
+        current.startActivity(Activity.ACTIVITY_STANDARD, new Intent(current,activity));
     }
 
     public void goSingleTask(Class<? extends Activity> activity){
-        current.startActivity(Activity.ACTIVITY_SINGLE_TASK, new Intent(activity));
+        current.startActivity(Activity.ACTIVITY_SINGLE_TASK, new Intent(current,activity));
     }
 
     public void goSingleTop(Class<? extends Activity> activity){
-        current.startActivity(Activity.ACTIVITY_SINGLE_TOP, new Intent(activity));
+        current.startActivity(Activity.ACTIVITY_SINGLE_TOP, new Intent(current,activity));
     }
 }

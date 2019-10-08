@@ -37,7 +37,7 @@ public abstract class SimilarApplication extends Application {
         if(clazz.isAnnotationPresent(Launcher.class)){
             Launcher launcher =getClass().getAnnotation(Launcher.class);
             Class<? extends Activity> activityClass= launcher.value();
-            ActivityManager.instance().pushActivityByStandard(new Intent(activityClass));
+            ActivityManager.instance().pushActivityByStandard(new Intent(null,activityClass));
             notifyPreloader(new ApplicationNotification(this));
             ready.setValue(!clazz.isAnnotationPresent(similar.core.Preloader.class));
         }else {

@@ -10,5 +10,4 @@ public abstract class Context {
      URL getFxmlLocation(String name){
        return ClassLoader.getSystemResource(/*FXML_PATH+*/name);
      }
-
 }
