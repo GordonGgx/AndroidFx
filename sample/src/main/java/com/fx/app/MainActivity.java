@@ -1,6 +1,7 @@
 package com.fx.app;
 
 
+import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.shape.Rectangle;
@@ -13,6 +14,8 @@ public class MainActivity extends Activity implements TestPreload.SharedScene {
 
     private Rectangle rectangle;
     private Parent parentNode;
+    @FXML
+    private Button btn;
 
     @Override
     protected void onCreated() {
@@ -39,8 +42,8 @@ public class MainActivity extends Activity implements TestPreload.SharedScene {
 //        pathTransition.setAutoReverse(true);
 //        pathTransition.play();
         getWindow().setTitle("场景切换动画测试");
-        Button button=findViewById("btn");
-        button.setOnAction(event -> {
+       // Button button=findViewById("btn");
+        btn.setOnAction(event -> {
             startActivity(new Intent(this,SecondActivity.class));
         });
 

@@ -1,5 +1,8 @@
 package similar.core;
 
+import com.sun.javafx.scene.NodeHelper;
+import javafx.animation.FadeTransition;
+import javafx.animation.Transition;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -7,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import similar.data.Intent;
 import similar.utils.ErrorHandler;
 
@@ -35,8 +39,7 @@ public class Activity extends Context{
             oldVisible=newVisible;
             if(newVisible){
                 //显示当前的Activity
-                window.setScene(mScene);
-                onStart();
+                attachToWindow();
             }else {
                 onStop();
             }
@@ -198,5 +201,28 @@ public class Activity extends Context{
 
     void hidden(){
         showing.setValue(false);
+    }
+
+    private void attachToWindow(){
+        window.setScene(mScene);
+        window.centerOnScreen();
+        animIn(mScene.getRoot());
+        onStart();
+    }
+
+    protected void animIn(Parent parent){
+        FadeTransition fadeTransition=new FadeTransition(Duration.millis(2000));
+        fadeTransition.setNode(parent);
+        fadeTransition.setFromValue(0);
+        fadeTransition.setToValue(1);
+        fadeTransition.play();
+    }
+
+    protected void animOut(Parent parent){
+        FadeTransition fadeTransition=new FadeTransition(Duration.millis(2000));
+        fadeTransition.setNode(parent);
+        fadeTransition.setFromValue(1);
+        fadeTransition.setToValue(0);
+        fadeTransition.play();
     }
 }
