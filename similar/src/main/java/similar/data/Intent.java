@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Intent {
+public final class Intent {
 
 
     private Map<String,Object> mMap=null;

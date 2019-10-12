@@ -5,7 +5,7 @@ import similar.core.Activity;
 
 import java.util.Objects;
 
-public class Navigation {
+public final class Navigation {
 
     private Intent intent;
 
