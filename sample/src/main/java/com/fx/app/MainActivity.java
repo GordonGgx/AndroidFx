@@ -4,10 +4,14 @@ package com.fx.app;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import similar.control.ListView;
 import similar.core.Activity;
 import similar.core.Layout;
 import similar.data.Intent;
+
+import java.util.Random;
 
 @Layout("layout/main.fxml")
 public class MainActivity extends Activity implements TestPreload.SharedScene {
@@ -16,6 +20,8 @@ public class MainActivity extends Activity implements TestPreload.SharedScene {
     private Parent parentNode;
     @FXML
     private Button btn;
+    @FXML
+    private ListView clv;
 
     @Override
     protected void onCreated() {
@@ -45,6 +51,10 @@ public class MainActivity extends Activity implements TestPreload.SharedScene {
        // Button button=findViewById("btn");
         btn.setOnAction(event -> {
             startActivity(new Intent(this,SecondActivity.class));
+        });
+        clv.setOnAction(event -> {
+            Random random=new Random(System.currentTimeMillis());
+            clv.setBackgroundFill(Color.color(random.nextDouble(),random.nextDouble(),random.nextDouble()));
         });
 
     }
