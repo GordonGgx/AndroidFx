@@ -7,9 +7,9 @@
 3. 提供Activity支持
 
 ## TODO
-1. ListView支持
-2. 场景切换动画支持
-3. ...
+1. 更多的控件
+2. 异步任务
+3. 场景切换动画支持
 
 ## Requirements
 需要Java 8u40 或者更高的版本,支持Java11
