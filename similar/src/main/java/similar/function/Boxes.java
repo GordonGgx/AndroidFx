@@ -56,8 +56,8 @@ public class Boxes {
 
         @Override
         public <F> Ap<T, F> compose(Function<R, F> fn) {
-            return Boxes.box(fn.compose(this.fn.value));
 //            return Boxes.box((T param)->fn.apply(this.fn.value.apply(param)));
+            return Boxes.box(fn.compose(this.fn.value));
         }
     }
 }

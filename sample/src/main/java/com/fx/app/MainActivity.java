@@ -1,6 +1,7 @@
 package com.fx.app;
 
 
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -12,6 +13,7 @@ import similar.core.Layout;
 import similar.data.Intent;
 
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
 @Layout("layout/main.fxml")
 public class MainActivity extends Activity implements TestPreload.SharedScene {
