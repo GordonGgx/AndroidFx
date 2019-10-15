@@ -73,7 +73,7 @@ public class ListView extends Control {
     private static class StyleableProperties{
 
         private static final CssMetaData<ListView,Paint> BACKGROUND_FILL=
-                new CssMetaData<>("-fx-custome-list-view-fill",
+                new CssMetaData<ListView,Paint>("-fx-custome-list-view-fill",
                         PaintConverter.getInstance(), Color.BLACK) {
                     @Override
                     public boolean isSettable(ListView styleable) {
