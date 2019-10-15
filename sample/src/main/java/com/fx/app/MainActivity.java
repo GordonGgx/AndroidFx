@@ -14,16 +14,17 @@ import similar.data.Intent;
 
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ForkJoinPool;
 
 @Layout("layout/main.fxml")
 public class MainActivity extends Activity implements TestPreload.SharedScene {
 
     private Rectangle rectangle;
     private Parent parentNode;
-    @FXML
-    private Button btn;
-    @FXML
-    private ListView clv;
+//    @FXML
+//    private Button btn;
+//    @FXML
+//    private ListView clv;
 
     @Override
     protected void onCreated() {
@@ -51,14 +52,59 @@ public class MainActivity extends Activity implements TestPreload.SharedScene {
 //        pathTransition.play();
         getWindow().setTitle("场景切换动画测试");
        // Button button=findViewById("btn");
-        btn.setOnAction(event -> {
-            startActivity(new Intent(this,SecondActivity.class));
+//        btn.setOnAction(event -> {
+//            startActivity(new Intent(this,SecondActivity.class));
+//        });
+//        clv.setOnAction(event -> {
+//            Random random=new Random(System.currentTimeMillis());
+//            clv.setBackgroundFill(Color.color(random.nextDouble(),random.nextDouble(),random.nextDouble()));
+//        });
+        System.out.println(ForkJoinPool.getCommonPoolParallelism());
+        CompletableFuture.runAsync(()->{
+            System.out.println("第一个执行");
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("第一个执行结束");
         });
-        clv.setOnAction(event -> {
-            Random random=new Random(System.currentTimeMillis());
-            clv.setBackgroundFill(Color.color(random.nextDouble(),random.nextDouble(),random.nextDouble()));
+        CompletableFuture.runAsync(()->{
+            System.out.println("第2个执行");
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("第2个执行结束");
         });
-
+        CompletableFuture.runAsync(()->{
+            System.out.println("第3个执行");
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("第3个执行结束");
+        });
+        CompletableFuture.runAsync(()->{
+            System.out.println("第4个执行");
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("第4个执行结束");
+        });
+        CompletableFuture.runAsync(()->{
+            System.out.println("第5个执行");
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("第5个执行结束");
+        });
     }
 
     @Override

@@ -98,7 +98,7 @@ public class VirtualFlow<T extends Node> extends Region {
      * <p>
      * This is package private ONLY FOR TESTING
      */
-    final javafx.scene.control.skin.VirtualFlow.ArrayLinkedList<T> cells = new javafx.scene.control.skin.VirtualFlow.ArrayLinkedList<T>();
+    //final javafx.scene.control.skin.VirtualFlow.ArrayLinkedList<T> cells = new javafx.scene.control.skin.VirtualFlow.ArrayLinkedList<T>();
 
     /**
      * A structure containing cells that can be reused later. These are cells
@@ -107,7 +107,7 @@ public class VirtualFlow<T extends Node> extends Region {
      * <p>
      * This is package private ONLY FOR TESTING
      */
-    final javafx.scene.control.skin.VirtualFlow.ArrayLinkedList<T> pile = new javafx.scene.control.skin.VirtualFlow.ArrayLinkedList<T>();
+    //final javafx.scene.control.skin.VirtualFlow.ArrayLinkedList<T> pile = new javafx.scene.control.skin.VirtualFlow.ArrayLinkedList<T>();
 
     /**
      * A special cell used to accumulate bounds, such that we reduce object
@@ -221,7 +221,7 @@ public class VirtualFlow<T extends Node> extends Region {
             if (Properties.IS_TOUCH_SUPPORTED) {
                 if (touchDetected == false &&  mouseDown == false ) {
                     //Scrollbar释放动画
-                    startSBReleasedAnimation();
+//                    startSBReleasedAnimation();
                 }
                 //计算滑动方向的增量
                 double virtualDelta = 0.0;
@@ -247,24 +247,24 @@ public class VirtualFlow<T extends Node> extends Region {
         if (vertical == null) {
             vertical = new BooleanPropertyBase(true) {
                 @Override protected void invalidated() {
-                    pile.clear();
-                    sheetChildren.clear();
-                    cells.clear();
-                    lastWidth = lastHeight = -1;
-                    setMaxPrefBreadth(-1);
-                    setViewportBreadth(0);
-                    setViewportLength(0);
-                    lastPosition = 0;
-                    hbar.setValue(0);
-                    vbar.setValue(0);
-                    setPosition(0.0f);
-                    setNeedsLayout(true);
-                    requestLayout();
+//                    pile.clear();
+//                    sheetChildren.clear();
+//                    cells.clear();
+//                    lastWidth = lastHeight = -1;
+//                    setMaxPrefBreadth(-1);
+//                    setViewportBreadth(0);
+//                    setViewportLength(0);
+//                    lastPosition = 0;
+//                    hbar.setValue(0);
+//                    vbar.setValue(0);
+//                    setPosition(0.0f);
+//                    setNeedsLayout(true);
+//                    requestLayout();
                 }
 
                 @Override
                 public Object getBean() {
-                    return javafx.scene.control.skin.VirtualFlow.this;
+                    return VirtualFlow.this;
                 }
 
                 @Override

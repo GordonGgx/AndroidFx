@@ -20,7 +20,7 @@ public class VirtualScrollBar extends ScrollBar {
                 if (adjusting) {
                     // no-op
                 } else {
-                    flow.setPosition(getValue());
+//                    flow.setPosition(getValue());
                 }
             }
         });
@@ -42,7 +42,7 @@ public class VirtualScrollBar extends ScrollBar {
     @Override
     public void decrement() {
         if (isVirtual()) {
-            flow.scrollPixels(-10);
+//            flow.scrollPixels(-10);
         } else {
             super.decrement();
         }
@@ -51,7 +51,7 @@ public class VirtualScrollBar extends ScrollBar {
     @Override
     public void increment() {
         if (isVirtual()) {
-            flow.scrollPixels(10);
+//            flow.scrollPixels(10);
         } else {
             super.increment();
         }
@@ -59,24 +59,24 @@ public class VirtualScrollBar extends ScrollBar {
 
     @Override
     public void adjustValue(double pos) {
-        if (isVirtual()) {
-            adjusting = true;
-            double oldValue = flow.getPosition();
-
-            double newValue = ((getMax() - getMin()) * Utils.clamp(0, pos, 1))+getMin();
-            if (newValue < oldValue) {
-                IndexedCell cell = flow.getFirstVisibleCell();
-                if (cell == null) return;
-                flow.scrollToBottom(cell);
-            } else if (newValue > oldValue) {
-                IndexedCell cell = flow.getLastVisibleCell();
-                if (cell == null) return;
-                flow.scrollToTop(cell);
-            }
-
-            adjusting = false;
-        } else {
-            super.adjustValue(pos);
-        }
+//        if (isVirtual()) {
+//            adjusting = true;
+////            double oldValue = flow.getPosition();
+//
+//            double newValue = ((getMax() - getMin()) * Utils.clamp(0, pos, 1))+getMin();
+//            if (newValue < oldValue) {
+//                IndexedCell cell = flow.getFirstVisibleCell();
+//                if (cell == null) return;
+//                flow.scrollToBottom(cell);
+//            } else if (newValue > oldValue) {
+//                IndexedCell cell = flow.getLastVisibleCell();
+//                if (cell == null) return;
+//                flow.scrollToTop(cell);
+//            }
+//
+//            adjusting = false;
+//        } else {
+//            super.adjustValue(pos);
+//        }
     }
 }
