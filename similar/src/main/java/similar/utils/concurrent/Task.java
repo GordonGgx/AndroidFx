@@ -18,7 +18,7 @@ import java.util.function.Supplier;
  * <p>
  *     该类用来执行异步耗时任务，结果可传递到下一个任务，<br>
  *     如果在执行任务过程中产生了异常，则中断后续的其他任务，最终交给exceptionally<br>
- *     如果后续任务是exceptionThen则可以处理上一个任务异常后的修复，并传递修复后的结果给下一个任务<br>
+ *     如果后续任务是exceptionThen则可以捕获上一个任务异常，并允许传递一个正常结果给下一个任务<br>
  *     如果后续任务是exceptionThen，上个任务并没有发生异常，则该任务会将上个任务的执行结果传递给后续的任务
  * </p>
  * <pre><code>
