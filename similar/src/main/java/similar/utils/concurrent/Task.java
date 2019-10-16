@@ -9,10 +9,6 @@ public class Task<T>  {
 
     private T result;
 
-    /**
-     * 异常信息
-     */
-    private Throwable ex;
 
     /**
      * 线程切换模式
@@ -72,7 +68,10 @@ public class Task<T>  {
     }
 
     private  void completeThrowable(Throwable t) {
-        this.ex=t;
+        //将当前任务的异常堆栈信息传递给下一个任务，如果下一个任务存在的话
+        if(pending!=null){
+            pending.setException(t);
+        }
     }
 
     /**
@@ -93,10 +92,6 @@ public class Task<T>  {
      */
     private void postComplete() {
         if (pending!=null){
-            if(ex!=null){
-                //传递异常堆栈信息
-                pending.setException(ex);
-            }
             //执行下一个任务
             scheme.execute(pending);
         }

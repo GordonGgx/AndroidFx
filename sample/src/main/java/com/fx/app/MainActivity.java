@@ -75,10 +75,7 @@ public class MainActivity extends Activity implements TestPreload.SharedScene {
             System.out.println(str);
             str.split("g")[5]="0";
             return str.toLowerCase();
-        }).runAs(Scheme.work()).exceptionThen(ex->{
-            System.out.println("有异常则处理");
-            return "xtt";
-        }).andThen(str->{
+        }).runAs(Scheme.work()).andThen(str->{
             System.out.println(Thread.currentThread().getName());
             System.out.println(str);
             return str.split("g");
