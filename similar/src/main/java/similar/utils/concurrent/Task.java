@@ -5,6 +5,54 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+/**
+ * <p>异步任务类，用来处理耗时任务代替{@link javafx.concurrent.Task}使用
+ * 该类中提供了工作线程{@link Scheme#work()}到JavaFx UI{@link Scheme#ui()}线程的切换能力</p>
+ * <h2>线程切换</h2>
+ * <p>{@link Task#runAs(Scheme)}方法用来设置线程切换模式</p>
+ * <pre><code>
+ *  runAs(Scheme.work())
+ *  runAs(Scheme.ui())
+ * </code></pre>
+ * <h2>基本使用方法</h2>
+ * <p>
+ *     该类用来执行异步耗时任务，结果可传递到下一个任务，<br>
+ *     如果在执行任务过程中产生了异常，则中断后续的其他任务，最终交给exceptionally<br>
+ *     如果后续任务是exceptionThen则可以处理上一个任务异常后的修复，并传递修复后的结果给下一个任务<br>
+ *     如果后续任务是exceptionThen，上个任务并没有发生异常，则该任务会将上个任务的执行结果传递给后续的任务
+ * </p>
+ * <pre><code>
+ *     {@literal Task.async(()->{
+ *             //耗时任务
+ *             //...
+ *             return "result";
+ *         }).andThen(str->{
+ *             //耗时任务
+ *             //...
+ *             return str.toUpperCase();
+ *         }).runAs(Scheme.ui()).andThen(str->{
+ *             //当前Javafx线程中，可以更新UI
+ *             str.split("g")[7]="0";
+ *             return str.toLowerCase();
+ *         }).exceptionThen(throwable -> {
+ *              //如果上一个任务发生了异常，此处可以处理异常修复，
+ *              //如果没有这个任务则其后的所有任务中断直接执行exceptionally，如果有改任务的话
+ *             return "fixResult";
+ *         }).runAs(Scheme.work()).andThen(str->{
+ *             return str.split("g");
+ *         }).runAs(Scheme.work()).andThen(strings -> {
+ *             System.out.println(strings[7]);
+ *         }).exceptionally(ex->{
+ *              //异常总汇
+ *             System.out.println(Thread.currentThread().getName());
+ *             ex.printStackTrace();
+ *         });}
+ * </code></pre>
+ *
+ * @param <T>
+ * @author ggx
+ * @version 1.0 2019-10-16
+ */
 public class Task<T>  {
 
     private T result;

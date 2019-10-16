@@ -8,6 +8,7 @@ abstract class FutureTask implements Runnable{
 
     private Throwable ex;
 
+
     public Throwable getException() {
         return ex;
     }
@@ -15,4 +16,6 @@ abstract class FutureTask implements Runnable{
     public void setException(Throwable ex) {
         this.ex = ex;
     }
+
+
 }
