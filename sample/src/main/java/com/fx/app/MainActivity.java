@@ -1,20 +1,14 @@
 package com.fx.app;
 
 
-import javafx.concurrent.Task;
-import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import similar.control.ListView;
 import similar.core.Activity;
 import similar.core.Layout;
-import similar.data.Intent;
+import similar.utils.concurrent.Scheme;
+import similar.utils.concurrent.Task;
 
-import java.util.Random;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ForkJoinPool;
+import java.util.Arrays;
 
 @Layout("layout/main.fxml")
 public class MainActivity extends Activity implements TestPreload.SharedScene {
@@ -59,52 +53,44 @@ public class MainActivity extends Activity implements TestPreload.SharedScene {
 //            Random random=new Random(System.currentTimeMillis());
 //            clv.setBackgroundFill(Color.color(random.nextDouble(),random.nextDouble(),random.nextDouble()));
 //        });
-        System.out.println(ForkJoinPool.getCommonPoolParallelism());
-        CompletableFuture.runAsync(()->{
-            System.out.println("第一个执行");
+        Task.async(()->{
+            System.out.println(Thread.currentThread().getName());
             try {
-                Thread.sleep(5000);
+                Thread.sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("第一个执行结束");
-        });
-        CompletableFuture.runAsync(()->{
-            System.out.println("第2个执行");
+            return "ggx";
+        }).andThen(str->{
+            System.out.println(Thread.currentThread().getName());
+            System.out.println(str);
             try {
-                Thread.sleep(5000);
+                Thread.sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("第2个执行结束");
+            return str.toUpperCase();
+        }).runAs(Scheme.ui()).andThen(str->{
+            System.out.println(Thread.currentThread().getName());
+            System.out.println(str);
+            str.split("g")[5]="0";
+            return str.toLowerCase();
+        }).runAs(Scheme.work()).exceptionThen(ex->{
+            System.out.println("有异常则处理");
+            return "xtt";
+        }).andThen(str->{
+            System.out.println(Thread.currentThread().getName());
+            System.out.println(str);
+            return str.split("g");
+        }).runAs(Scheme.work()).andThen(strings -> {
+            System.out.println(Thread.currentThread().getName());
+            System.out.println(Arrays.toString(strings));
+            System.out.println(strings[7]);
+        }).exceptionally(ex->{
+            System.out.println(Thread.currentThread().getName());
+            ex.printStackTrace();
         });
-        CompletableFuture.runAsync(()->{
-            System.out.println("第3个执行");
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("第3个执行结束");
-        });
-        CompletableFuture.runAsync(()->{
-            System.out.println("第4个执行");
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("第4个执行结束");
-        });
-        CompletableFuture.runAsync(()->{
-            System.out.println("第5个执行");
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("第5个执行结束");
-        });
+
     }
 
     @Override

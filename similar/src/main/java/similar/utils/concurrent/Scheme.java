@@ -1,23 +1,41 @@
-package similar.function;
+package similar.utils.concurrent;
 
 import javafx.application.Platform;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.ForkJoinPool;
 
+/**
+ * 作业模式
+ * {@link WorkScheme}
+ * {@link UIScheme}
+ */
 public abstract class Scheme {
 
-    public static Scheme io(){
+    /**
+     * 创建工作线程的作业模式
+     * @return 作业模式
+     */
+    public static Scheme work(){
 
-        return new IOScheme();
+        return new WorkScheme();
     }
+
+    /**
+     * 创建JavaFx主线程的作业模式
+     * @return 作业模式
+     */
     public static Scheme ui(){
         return new UIScheme();
     }
 
     abstract void execute(Runnable runnable);
 
-    private static class IOScheme extends Scheme{
+    /**
+     * 该工作模式使用{@link ForkJoinPool#commonPool()}创建如果当前CPU可用核心数<2,则直接使用{@link Thread}创建
+     * @see ForkJoinPool
+     */
+    private static class WorkScheme extends Scheme{
         private static final boolean USE_COMMON_POOL =
                 (ForkJoinPool.getCommonPoolParallelism() > 1);
 
@@ -33,7 +51,10 @@ public abstract class Scheme {
         }
     }
 
-
+    /**
+     * 该工作模式使用{@link Platform#runLater(Runnable)}包裹工作，
+     * 如果当前执行现场已经是JavaFxApplicationThread则直接运行任务
+     */
     private static class UIScheme extends Scheme{
 
         @Override
