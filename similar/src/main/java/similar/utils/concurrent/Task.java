@@ -35,7 +35,7 @@ import java.util.function.Supplier;
  *             str.split("g")[7]="0";
  *             return str.toLowerCase();
  *         }).exceptionThen(throwable -> {
- *              //如果上一个任务发生了异常，此处可以处理异常修复，
+ *              //如果上一个任务发生了异常，仍就想继续执行后续的任务,可以使用此操作符
  *              //如果没有这个任务则其后的所有任务中断直接执行exceptionally，如果有改任务的话
  *             return "fixResult";
  *         }).runAs(Scheme.work()).andThen(str->{
