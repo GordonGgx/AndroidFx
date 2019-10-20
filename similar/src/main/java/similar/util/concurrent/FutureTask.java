@@ -1,4 +1,4 @@
-package similar.utils.concurrent;
+package similar.util.concurrent;
 
 /**
  * 可能携带异常信息的任务类

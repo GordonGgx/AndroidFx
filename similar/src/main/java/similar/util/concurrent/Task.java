@@ -1,4 +1,4 @@
-package similar.utils.concurrent;
+package similar.util.concurrent;
 
 import java.util.Objects;
 import java.util.function.Consumer;

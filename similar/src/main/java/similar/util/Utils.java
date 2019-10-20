@@ -1,4 +1,4 @@
-package similar.utils;
+package similar.util;
 
 public class Utils {
 

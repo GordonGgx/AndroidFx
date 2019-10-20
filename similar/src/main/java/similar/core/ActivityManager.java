@@ -2,7 +2,7 @@ package similar.core;
 
 import javafx.stage.Stage;
 import similar.data.Intent;
-import similar.utils.ErrorHandler;
+import similar.util.ErrorHandler;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Stack;

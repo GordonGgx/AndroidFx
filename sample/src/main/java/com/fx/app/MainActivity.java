@@ -5,8 +5,8 @@ import javafx.scene.Parent;
 import javafx.scene.shape.Rectangle;
 import similar.core.Activity;
 import similar.core.Layout;
-import similar.utils.concurrent.Scheme;
-import similar.utils.concurrent.Task;
+import similar.util.concurrent.Scheme;
+import similar.util.concurrent.Task;
 
 import java.util.Arrays;
 

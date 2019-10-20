@@ -1,4 +1,4 @@
-package similar.utils.concurrent;
+package similar.util.concurrent;
 
 import javafx.application.Platform;
 

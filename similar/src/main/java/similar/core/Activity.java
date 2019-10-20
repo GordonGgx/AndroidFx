@@ -1,8 +1,6 @@
 package similar.core;
 
-import com.sun.javafx.scene.NodeHelper;
 import javafx.animation.FadeTransition;
-import javafx.animation.Transition;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -12,7 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import similar.data.Intent;
-import similar.utils.ErrorHandler;
+import similar.util.ErrorHandler;
 
 import java.io.IOException;
 

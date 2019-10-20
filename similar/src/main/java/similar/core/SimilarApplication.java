@@ -7,8 +7,8 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.stage.Stage;
 import similar.data.Intent;
-import similar.utils.ErrorHandler;
-import similar.utils.Utils;
+import similar.util.ErrorHandler;
+import similar.util.Utils;
 
 public abstract class SimilarApplication extends Application {
 
