@@ -5,10 +5,12 @@ import javafx.scene.Parent;
 import javafx.scene.shape.Rectangle;
 import similar.core.Activity;
 import similar.core.Layout;
+import similar.function.Boxes;
 import similar.util.concurrent.Scheme;
 import similar.util.concurrent.Task;
 
 import java.util.Arrays;
+import java.util.function.Function;
 
 @Layout("layout/main.fxml")
 public class MainActivity extends Activity implements TestPreload.SharedScene {
@@ -90,6 +92,9 @@ public class MainActivity extends Activity implements TestPreload.SharedScene {
             System.out.println(Thread.currentThread().getName());
             ex.printStackTrace();
         });
+
+        Function<Integer,Function<Integer,Integer>> add=x->y->x+y;
+        Boxes.box(add).ap(Boxes.box(1)).as(Boxes::box).ap(Boxes.box(2));
 
     }
 
