@@ -93,14 +93,7 @@ public class Task<T>  {
         tryExecute(runnable);
         return task;
     }
-    public <U>Task<U> andThen(Supplier<U> fn){
-        Objects.requireNonNull(fn);
-        Task<U> task=new Task<>();
-        task.runAs(scheme);
-        SupplyTask<U> runnable=new SupplyTask<>(task,fn);
-        tryExecute(runnable);
-        return task;
-    }
+
     public Task<Void> andThen(Consumer<T> fn){
         Objects.requireNonNull(fn);
         Task<Void> task=new Task<>();

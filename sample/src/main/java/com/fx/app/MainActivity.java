@@ -10,6 +10,7 @@ import similar.util.concurrent.Scheme;
 import similar.util.concurrent.Task;
 
 import java.util.Arrays;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 @Layout("layout/main.fxml")
