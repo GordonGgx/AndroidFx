@@ -1,21 +1,31 @@
 package similar.core;
 
 import javafx.stage.Stage;
+import similar.core.window.WindowManager;
 import similar.data.Intent;
 import similar.util.ErrorHandler;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Stack;
 
+/**
+ * 管理和启动Activity
+ */
 class ActivityManager {
 
     private volatile static ActivityManager instance;
 
+    private List<similar.core.annotations.Activity> activityInfo;
+
     private Stack<Activity> activityStack;
 
-    private Stage window;
+    private WindowManager windowManager;
 
     private ActivityManager(){
+        activityInfo=new ArrayList<>();
         activityStack=new Stack<>();
     }
 
@@ -30,8 +40,24 @@ class ActivityManager {
         return instance;
     }
 
-    public void init(Stage stage){
-        window=stage;
+    public void setWindowManager(Stage stage){
+        windowManager =new WindowManager(stage);
+    }
+
+    public void initActivity(SimilarApplication application){
+        Class<?> clazz=application.getClass();
+        similar.core.annotations.Activity[] activities=clazz.getAnnotationsByType(similar.core.annotations.Activity.class);
+        if(activities.length==0){
+            ErrorHandler.get().show(new Exception("缺少Activity信息"));
+        }else {
+            for (var act:activities){
+                if(act.mainActivity()){
+                    activityInfo.add(0,act);
+                }else {
+                    activityInfo.add(act);
+                }
+            }
+        }
     }
 
     public static void clear(){
@@ -54,10 +80,10 @@ class ActivityManager {
      * 将activity压入栈中
      * @param intent
      */
-    public void pushActivityByStandard(Intent intent){
+    private void pushActivityByStandard(Intent intent){
         try {
             Activity activity = intent.getActivityClass().getConstructor().newInstance();
-            activity.setWindow(window);
+            activity.setWindow(windowManager);
             activity.setIntent(intent);
             activity.onCreated();
             Activity before=top();
@@ -73,7 +99,21 @@ class ActivityManager {
 
     }
 
-    public void pushActivityBySingleTask(Intent intent){
+    public void lunch(Intent intent){
+        similar.core.annotations.Activity info=findActivityInfo(intent);
+        if(info==null){
+            throw new RuntimeException("can not found this activity "+intent.getActivityClass());
+        }
+        if(info.lunchMode()==LaunchMode.SIGNAL_TOP){
+            pushActivityBySingleTop(intent);
+        }else if(info.lunchMode()==LaunchMode.SIGNAL_TASK){
+            pushActivityBySingleTask(intent);
+        }else {
+            pushActivityByStandard(intent);
+        }
+    }
+
+    private void pushActivityBySingleTask(Intent intent){
         Class<? extends Activity> activityClass= intent.getActivityClass();
         int index=findActivity(activityClass);
         if(index==-1){
@@ -86,7 +126,7 @@ class ActivityManager {
         }
     }
 
-    public void pushActivityBySingleTop(Intent intent){
+    private void pushActivityBySingleTop(Intent intent){
         Class<? extends Activity> activityClass= intent.getActivityClass();
         Activity topActivity=top();
         if(topActivity.isSame(activityClass)){
@@ -124,11 +164,37 @@ class ActivityManager {
         return -1;
     }
 
-    public Activity remove(Activity activity){
+    public void remove(Activity activity){
         activityStack.removeElement(activity);
         activity.onStop();
         activity.onDestroy();
-        return top();
+        Activity top=top();
+        if(top==null){
+            windowManager.closeWindow();
+        }else {
+            top.show();
+
+        }
+    }
+
+    public similar.core.annotations.Activity findActivityInfo(Intent intent){
+        for (var act:activityInfo){
+            if(act.name().getTypeName().equals(intent.getActivityClass().getTypeName())){
+                return act;
+            }
+        }
+        return null;
+    }
+
+    public similar.core.annotations.Activity getMainActivity(){
+        if(activityInfo.isEmpty()){
+            return null;
+        }
+        similar.core.annotations.Activity  main=activityInfo.get(0);
+        if(main.mainActivity()){
+            return main;
+        }
+        return null;
     }
 
 }

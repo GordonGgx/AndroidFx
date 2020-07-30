@@ -36,14 +36,6 @@ public final class Navigation {
     }
 
     public void go(Class<? extends Activity> activity){
-        current.startActivity(Activity.ACTIVITY_STANDARD, new Intent(current,activity));
-    }
-
-    public void goSingleTask(Class<? extends Activity> activity){
-        current.startActivity(Activity.ACTIVITY_SINGLE_TASK, new Intent(current,activity));
-    }
-
-    public void goSingleTop(Class<? extends Activity> activity){
-        current.startActivity(Activity.ACTIVITY_SINGLE_TOP, new Intent(current,activity));
+        current.startActivity( new Intent(activity));
     }
 }

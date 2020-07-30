@@ -1,0 +1,13 @@
+StackPanel{
+    id:root
+        class:rootClass
+        style:-fx-background-color:red,-fx-border-color:green
+        .children:Button{
+            id:btn
+        }
+}
+
+
+
+
+

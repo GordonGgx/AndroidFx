@@ -13,7 +13,7 @@
 3. 场景切换动画支持
 
 ## Requirements
-需要Java 8u40 或者更高的版本,支持Java11
+本框架建立于JDK14的基础上，作为客户端GUI请不要吝啬你的JDK版本
 
 ## Contact
 如有遇到问题可以在issues中提问。

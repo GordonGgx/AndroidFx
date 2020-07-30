@@ -2,9 +2,8 @@ package com.fx.app;
 
 
 import javafx.scene.control.Button;
-import javafx.stage.Stage;
 import similar.core.Activity;
-import similar.core.Layout;
+import similar.core.annotations.Layout;
 
 @Layout("layout/second.fxml")
 public class SecondActivity extends Activity {

@@ -1,10 +1,14 @@
 package com.fx.app;
 
 
-import similar.core.Launcher;
+import similar.core.LaunchMode;
+import similar.core.annotations.Activity;
+import similar.core.annotations.Preloader;
 import similar.core.SimilarApplication;
 
-@Launcher(MainActivity.class)
+
+@Activity(name = SecondActivity.class)
+@Activity(name = MainActivity.class,mainActivity = true,lunchMode = LaunchMode.SIGNAL_TASK)
 //@Preloader(TestPreload.class)
 public class App extends SimilarApplication {
 

@@ -11,7 +11,7 @@ plugins {
 group 'org.fx.similarAndroid'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = 1.9
+sourceCompatibility = JavaVersion.VERSION_14
 
 repositories {
     mavenCentral()

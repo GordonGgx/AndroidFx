@@ -1,4 +1,4 @@
-package similar.core;
+package similar.core.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface Launcher {
+public @interface Preloader {
 
-    Class<? extends Activity> value();
+    Class<? extends javafx.application.Preloader> value();
 }

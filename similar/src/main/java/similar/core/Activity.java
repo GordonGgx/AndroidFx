@@ -9,6 +9,8 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import similar.core.annotations.Layout;
+import similar.core.window.WindowManager;
 import similar.data.Intent;
 import similar.util.ErrorHandler;
 
@@ -16,17 +18,13 @@ import java.io.IOException;
 
 public class Activity extends Context{
 
-    public static final int ACTIVITY_SINGLE_TASK=1;
-    public static final int ACTIVITY_SINGLE_TOP=2;
-    public static final int ACTIVITY_STANDARD=3;
-
-    private Stage window;
+    private WindowManager windowManager;
 
     private Intent intent;
 
     private Scene mScene;
 
-    private ReadOnlyBooleanWrapper showing=new ReadOnlyBooleanWrapper(){
+    private final ReadOnlyBooleanWrapper showing=new ReadOnlyBooleanWrapper(){
         private boolean oldVisible;
         @Override
         protected void invalidated() {
@@ -37,7 +35,7 @@ public class Activity extends Context{
             oldVisible=newVisible;
             if(newVisible){
                 //显示当前的Activity
-                attachToWindow();
+                windowManager.attachToWindow(Activity.this);
             }else {
                 onStop();
             }
@@ -78,7 +76,7 @@ public class Activity extends Context{
     /**
      * 当Activity显示调用
      */
-    protected void onStart(){
+    public void onStart(){
 
     }
 
@@ -86,7 +84,7 @@ public class Activity extends Context{
     /**
      * 当Activity隐藏后调用
      */
-    protected void onStop(){
+    public void onStop(){
 
     }
 
@@ -94,7 +92,7 @@ public class Activity extends Context{
      * 当Activity销毁时调用
      * @see #finish()
      */
-    protected void onDestroy(){
+    public void onDestroy(){
 
     }
 
@@ -109,15 +107,7 @@ public class Activity extends Context{
 
     public void finish(){
         ActivityManager manager=ActivityManager.instance();
-        Activity currentTop=manager.remove(this);
-        if(currentTop!=null){
-            currentTop.show();
-            System.gc();
-        }else {
-            //当前栈内没有Activity，则退出应用
-            window.close();
-        }
-
+        manager.remove(this);
     }
 
     protected  <T extends Parent>T findViewById(String id){
@@ -153,31 +143,13 @@ public class Activity extends Context{
         }
     }
 
-    /**
-     * 更具启动模式打开新的界面，默认启动标准模式
-     * @param intent
-     */
-    public void startActivity(Intent intent){
-        startActivity(ACTIVITY_STANDARD, intent);
+
+    void setWindow(WindowManager manager){
+        windowManager=manager;
     }
 
-    public void startActivity(int mode, Intent intent){
-        ActivityManager activityManager=ActivityManager.instance();
-        if(mode==ACTIVITY_SINGLE_TASK){
-            activityManager.pushActivityBySingleTask(intent);
-        }else if(mode==ACTIVITY_SINGLE_TOP){
-            activityManager.pushActivityBySingleTop(intent);
-        }else {
-            activityManager.pushActivityByStandard(intent);
-        }
-    }
-
-    void setWindow(Stage stage){
-        this.window=stage;
-    }
-
-    public Stage getWindow() {
-        return window;
+    public WindowManager getWindowManager() {
+        return windowManager;
     }
 
     /**
@@ -201,26 +173,7 @@ public class Activity extends Context{
         showing.setValue(false);
     }
 
-    private void attachToWindow(){
-        window.setScene(mScene);
-        window.centerOnScreen();
-        animIn(mScene.getRoot());
-        onStart();
-    }
-
-    protected void animIn(Parent parent){
-        FadeTransition fadeTransition=new FadeTransition(Duration.millis(2000));
-        fadeTransition.setNode(parent);
-        fadeTransition.setFromValue(0);
-        fadeTransition.setToValue(1);
-        fadeTransition.play();
-    }
-
-    protected void animOut(Parent parent){
-        FadeTransition fadeTransition=new FadeTransition(Duration.millis(2000));
-        fadeTransition.setNode(parent);
-        fadeTransition.setFromValue(1);
-        fadeTransition.setToValue(0);
-        fadeTransition.play();
+    public Scene getScene() {
+        return mScene;
     }
 }

@@ -6,6 +6,8 @@ import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.stage.Stage;
+import similar.core.annotations.Launcher;
+import similar.core.annotations.Preloader;
 import similar.data.Intent;
 import similar.util.ErrorHandler;
 import similar.util.Utils;
@@ -26,22 +28,25 @@ public abstract class SimilarApplication extends Application {
                 });
             }
         });
+        ActivityManager.instance().initActivity(this);
         onCreated();
     }
 
     @Override
     public final void start(Stage primaryStage) throws Exception {
         this.primaryStage=primaryStage;
-        ActivityManager.instance().init(primaryStage);
-        Class<?> clazz=getClass();
-        if(clazz.isAnnotationPresent(Launcher.class)){
-            Launcher launcher =getClass().getAnnotation(Launcher.class);
-            Class<? extends Activity> activityClass= launcher.value();
-            ActivityManager.instance().pushActivityByStandard(new Intent(null,activityClass));
-            notifyPreloader(new ApplicationNotification(this));
-            ready.setValue(!clazz.isAnnotationPresent(similar.core.Preloader.class));
-        }else {
+        ActivityManager.instance().setWindowManager(primaryStage);
+        similar.core.annotations.Activity mainActivity=ActivityManager.instance().getMainActivity();
+        if(mainActivity==null){
             ErrorHandler.get().show(new Exception("缺少启动类"));
+        }else {
+            ActivityManager.instance().lunch(new Intent(mainActivity.name()));
+            boolean hasPreload=getClass().isAnnotationPresent(Preloader.class);
+            if(hasPreload){
+                notifyPreloader(new ApplicationNotification(this));
+            }
+
+            ready.setValue(!hasPreload);
         }
     }
 
