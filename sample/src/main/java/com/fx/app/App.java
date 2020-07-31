@@ -19,12 +19,7 @@ public class App extends AndroidApplication {
     @Override
     protected void onCreated() throws Exception {
         System.out.println("App onCreated");
-        System.out.println(System.getProperty("user.dir"));
-        System.out.println(System.getProperty("java.io.tmpdir"));
-        System.out.println(Environment.getCacheDataDir().getAbsolutePath());
-        Preferences.userRoot().putInt("ggx",20);
-        System.out.println(Preferences.userRoot().getInt("ggx",30));
-        System.out.println(Preferences.userRoot().name());
+
     }
 
     @Override

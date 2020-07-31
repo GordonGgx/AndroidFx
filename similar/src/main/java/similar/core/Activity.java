@@ -24,7 +24,7 @@ public class Activity extends Context{
 
     private Scene mScene;
 
-    private final ReadOnlyBooleanWrapper showing=new ReadOnlyBooleanWrapper(){
+    private final ReadOnlyBooleanWrapper showing=new ReadOnlyBooleanWrapper(false){
         private boolean oldVisible;
         @Override
         protected void invalidated() {

@@ -31,7 +31,6 @@ public final class SimilarApplication extends javafx.application.Application {
         });
         primaryStage.setTitle(application.getTitle());
         primaryStage.setResizable(true);
-        primaryStage.setAlwaysOnTop(true);
         primaryStage.centerOnScreen();
         primaryStage.getIcons().add(new Image(application.getIcon()));
         ActivityManager.instance().setWindowManager(primaryStage);
@@ -44,7 +43,6 @@ public final class SimilarApplication extends javafx.application.Application {
             if(hasPreload){
                 notifyPreloader(new ApplicationNotification(this));
             }
-
             ready.setValue(!hasPreload);
         }
     }
