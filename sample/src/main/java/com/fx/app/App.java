@@ -1,31 +1,42 @@
 package com.fx.app;
 
 
+import similar.core.AndroidApplication;
+import similar.core.Environment;
 import similar.core.LaunchMode;
 import similar.core.annotations.Activity;
-import similar.core.annotations.Preloader;
-import similar.core.SimilarApplication;
+import similar.core.annotations.Application;
+
+import java.io.File;
+import java.util.prefs.Preferences;
 
 
 @Activity(name = SecondActivity.class)
 @Activity(name = MainActivity.class,mainActivity = true,lunchMode = LaunchMode.SIGNAL_TASK)
-//@Preloader(TestPreload.class)
-public class App extends SimilarApplication {
+@Application(packageName = "com.fx.app" )
+public class App extends AndroidApplication {
 
     @Override
     protected void onCreated() throws Exception {
-        super.onCreated();
         System.out.println("App onCreated");
+        System.out.println(System.getProperty("user.dir"));
+        System.out.println(System.getProperty("java.io.tmpdir"));
+        System.out.println(Environment.getCacheDataDir().getAbsolutePath());
+        Preferences.userRoot().putInt("ggx",20);
+        System.out.println(Preferences.userRoot().getInt("ggx",30));
+        System.out.println(Preferences.userRoot().name());
     }
 
     @Override
-    protected void onFinish() throws Exception {
-        super.onFinish();
-        System.out.println("app destroy");
+    protected void onFinished() throws Exception {
+        System.out.println("App destroy");
     }
 
-    public static void main(String[] args) {
-        launch(App.class,args);
-
+    public static void main(String[] args)  {
+        try {
+            launch(new App(),args);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

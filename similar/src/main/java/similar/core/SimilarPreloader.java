@@ -76,5 +76,9 @@ public abstract class SimilarPreloader extends Preloader {
         stage.close();
     }
 
+    protected void completed(){
+        SimilarApplication.completed();
+    }
+
 
 }

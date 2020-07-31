@@ -7,7 +7,6 @@ import similar.util.ErrorHandler;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
@@ -18,9 +17,9 @@ class ActivityManager {
 
     private volatile static ActivityManager instance;
 
-    private List<similar.core.annotations.Activity> activityInfo;
+    private final List<similar.core.annotations.Activity> activityInfo;
 
-    private Stack<Activity> activityStack;
+    private final Stack<Activity> activityStack;
 
     private WindowManager windowManager;
 
@@ -44,7 +43,7 @@ class ActivityManager {
         windowManager =new WindowManager(stage);
     }
 
-    public void initActivity(SimilarApplication application){
+    public void initActivity(AndroidApplication application){
         Class<?> clazz=application.getClass();
         similar.core.annotations.Activity[] activities=clazz.getAnnotationsByType(similar.core.annotations.Activity.class);
         if(activities.length==0){
