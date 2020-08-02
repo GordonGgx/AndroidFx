@@ -1,23 +1,13 @@
 package com.fx.app;
 
 
-import javafx.animation.PathTransition;
-import javafx.animation.Timeline;
 import javafx.fxml.FXML;
-import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.CubicCurveTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
 import similar.core.Activity;
 import similar.core.annotations.Layout;
 import similar.data.Intent;
-
-import java.util.prefs.Preferences;
 
 @Layout("layout/main.fxml")
 public class MainActivity extends Activity {
@@ -31,8 +21,11 @@ public class MainActivity extends Activity {
 //    private ListView clv;
 
     @Override
-    protected void onCreated() {
+    public void onCreated() {
         super.onCreated();
+        btn.setOnAction(event -> {
+            startActivity(new Intent(SecondActivity.class));
+        });
 //        Path path=new Path();
 //        path.getElements().add(new MoveTo(20,20));
 //        path.getElements().add(new CubicCurveTo(380,0,380,120,200,120));
@@ -54,7 +47,38 @@ public class MainActivity extends Activity {
 //        pathTransition.setCycleCount(Timeline.INDEFINITE);
 //        pathTransition.setAutoReverse(true);
 //        pathTransition.play();
+        System.out.println("Main act onCreated");
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        System.out.println("Main act onStart");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        System.out.println("Main act onResume");
+    }
+
+    @Override
+    public void onPause() {
+        super.onResume();
+        System.out.println("Main act onPause");
+    }
 
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        System.out.println("Main act onStop");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        System.out.println("Main act onDestroy");
     }
 }

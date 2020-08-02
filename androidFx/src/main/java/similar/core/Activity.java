@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -16,7 +17,7 @@ import similar.util.ErrorHandler;
 
 import java.io.IOException;
 
-public class Activity extends Context{
+public class Activity extends Context implements ILifecycle{
 
     private WindowManager windowManager;
 
@@ -24,34 +25,6 @@ public class Activity extends Context{
 
     private Scene mScene;
 
-    private final ReadOnlyBooleanWrapper showing=new ReadOnlyBooleanWrapper(false){
-        private boolean oldVisible;
-        @Override
-        protected void invalidated() {
-            final boolean newVisible=get();
-            if(oldVisible==newVisible){
-                return;
-            }
-            oldVisible=newVisible;
-            if(newVisible){
-                //显示当前的Activity
-                windowManager.attachToWindow(Activity.this);
-            }else {
-                onStop();
-            }
-
-        }
-
-        @Override
-        public Object getBean() {
-            return Activity.this;
-        }
-
-        @Override
-        public String getName() {
-            return "showing";
-        }
-    };
     public Activity() {
 
     }
@@ -60,14 +33,14 @@ public class Activity extends Context{
     /**
      * 当Activity被创建之后触发此方法
      */
-    protected void onCreated() {
+    public void onCreated() {
         Class<?> clazz=getClass();
         if(clazz.isAnnotationPresent(Layout.class)){
             Layout layout=clazz.getAnnotation(Layout.class);
             String fxml=layout.value();
             setContentView(fxml);
         }else {
-            setContentView(new Group());
+            setContentView(new StackPane());
         }
 
     }
@@ -80,10 +53,21 @@ public class Activity extends Context{
 
     }
 
+    @Override
+    public void onResume() {
+
+    }
+
+    @Override
+    public void onPause() {
+
+    }
+
 
     /**
      * 当Activity隐藏后调用
      */
+    @Override
     public void onStop(){
 
     }
@@ -92,6 +76,7 @@ public class Activity extends Context{
      * 当Activity销毁时调用
      * @see #finish()
      */
+    @Override
     public void onDestroy(){
 
     }
@@ -107,7 +92,7 @@ public class Activity extends Context{
 
     public void finish(){
         ActivityManager manager=ActivityManager.instance();
-        manager.remove(this);
+        manager.finishActivity(this);
     }
 
     protected  <T extends Parent>T findViewById(String id){
@@ -146,6 +131,7 @@ public class Activity extends Context{
 
     void setWindow(WindowManager manager){
         windowManager=manager;
+        windowManager.setLifecycle(this);
     }
 
     public WindowManager getWindowManager() {
@@ -162,15 +148,15 @@ public class Activity extends Context{
     }
 
     public boolean isShow(){
-        return showing.get();
+        return windowManager.isShowing();
     }
 
     void show(){
-        showing.setValue(true);
+        windowManager.attachToWindow(this);
     }
 
     void hidden(){
-        showing.setValue(false);
+        windowManager.closeWindow();
     }
 
     public Scene getScene() {

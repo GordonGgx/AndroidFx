@@ -25,5 +25,5 @@ javafx {
 mainClassName = 'com.fx.app.App'
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile project(":similar")
+    compile project(":androidFx")
 }

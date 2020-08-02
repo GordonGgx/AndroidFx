@@ -6,44 +6,48 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import similar.core.annotations.Preloader;
+import similar.core.window.WindowManager;
 import similar.data.Intent;
 import similar.util.ErrorHandler;
 
 public final class SimilarApplication extends javafx.application.Application {
 
-    private final static BooleanProperty ready=new SimpleBooleanProperty(false);
+    private final static BooleanProperty preloadReady=new SimpleBooleanProperty(false);
 
     private AndroidApplication application;
 
     @Override
     public final void init() throws Exception {
         application=AndroidApplication.instance();
-        ActivityManager.instance().initActivity(AndroidApplication.instance());
+        ActivityManager.instance().loadActivities(AndroidApplication.instance());
         application.onCreated();
     }
 
     @Override
     public final void start(Stage primaryStage) throws Exception {
-        ready.addListener((observable, oldValue, newValue) -> {
-            if(newValue&&!primaryStage.isShowing()){
-                Platform.runLater(primaryStage::show);
+        preloadReady.addListener((observable, oldValue, newValue) -> {
+            if(newValue){
+                Platform.runLater(()->{
+                    similar.core.annotations.Activity mainActivity=ActivityManager.instance().getMainActivity();
+                    ActivityManager.instance().lunch(new WindowManager(primaryStage),
+                            new Intent(mainActivity.name()));
+                });
             }
         });
-        primaryStage.setTitle(application.getTitle());
-        primaryStage.setResizable(true);
-        primaryStage.centerOnScreen();
-        primaryStage.getIcons().add(new Image(application.getIcon()));
-        ActivityManager.instance().setWindowManager(primaryStage);
+
         similar.core.annotations.Activity mainActivity=ActivityManager.instance().getMainActivity();
         if(mainActivity==null){
-            ErrorHandler.get().show(new Exception("缺少启动类"));
+            ErrorHandler.get().show(new Exception("缺少主Activity"));
         }else {
-            ActivityManager.instance().lunch(new Intent(mainActivity.name()));
             boolean hasPreload=getClass().isAnnotationPresent(Preloader.class);
             if(hasPreload){
                 notifyPreloader(new ApplicationNotification(this));
+            }else {
+                ActivityManager.instance().lunch(new WindowManager(primaryStage),
+                        new Intent(mainActivity.name()));
+                preloadReady.setValue(false);
             }
-            ready.setValue(!hasPreload);
+
         }
     }
 
@@ -56,7 +60,7 @@ public final class SimilarApplication extends javafx.application.Application {
 
 
     public static void completed(){
-        ready.setValue(true);
+        preloadReady.setValue(true);
     }
 
     Activity getCurrentActivity() {

@@ -1,6 +1,7 @@
 package similar.core;
 
 import similar.core.annotations.Activity;
+import similar.core.window.WindowManager;
 import similar.data.Intent;
 
 import java.io.File;
@@ -17,6 +18,6 @@ public abstract class Context {
 
      public void startActivity(Intent intent){
          ActivityManager activityManager=ActivityManager.instance();
-         activityManager.lunch(intent);
+         activityManager.lunch(new WindowManager(),intent);
      }
 }

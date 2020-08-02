@@ -28,19 +28,19 @@ public abstract class AndroidApplication {
      */
     protected abstract void onFinished() throws Exception;
 
-     String getIcon() {
+     public String getIcon() {
         return icon;
     }
 
-     String getTitle() {
+     public String getTitle() {
         return title;
     }
 
-     String getPackageName() {
+     public String getPackageName() {
         return packageName;
     }
 
-    static AndroidApplication instance(){
+    public static AndroidApplication instance(){
         return app;
     }
 

@@ -1,6 +1,5 @@
 package similar.core;
 
-import javafx.stage.Stage;
 import similar.core.window.WindowManager;
 import similar.data.Intent;
 import similar.util.ErrorHandler;
@@ -17,11 +16,10 @@ class ActivityManager {
 
     private volatile static ActivityManager instance;
 
+    //记录应用中所有Activity的信息
     private final List<similar.core.annotations.Activity> activityInfo;
 
     private final Stack<Activity> activityStack;
-
-    private WindowManager windowManager;
 
     private ActivityManager(){
         activityInfo=new ArrayList<>();
@@ -39,11 +37,7 @@ class ActivityManager {
         return instance;
     }
 
-    public void setWindowManager(Stage stage){
-        windowManager =new WindowManager(stage);
-    }
-
-    public void initActivity(AndroidApplication application){
+    public void loadActivities(AndroidApplication application){
         Class<?> clazz=application.getClass();
         similar.core.annotations.Activity[] activities=clazz.getAnnotationsByType(similar.core.annotations.Activity.class);
         if(activities.length==0){
@@ -63,7 +57,9 @@ class ActivityManager {
         if(instance!=null&&!instance.activityStack.empty()){
             Activity activity=instance.activityStack.pop();
             while (activity!=null){
-                activity.onStop();
+                if(activity.isShow()){
+                    activity.onStop();
+                }
                 activity.onDestroy();
                 if(!instance.activityStack.empty()){
                     activity=instance.activityStack.pop();
@@ -76,21 +72,23 @@ class ActivityManager {
     }
 
     /**
+     * 默认启动模式
+     * 该模式每次都会创建一个新的Activity
      * 将activity压入栈中
-     * @param intent
+     * 如果存在上一个Activity则隐藏上一个Activity
      */
-    private void pushActivityByStandard(Intent intent){
+    private void pushActivityByStandard(WindowManager manager,Intent intent){
         try {
-            Activity activity = intent.getActivityClass().getConstructor().newInstance();
-            activity.setWindow(windowManager);
-            activity.setIntent(intent);
-            activity.onCreated();
+            Activity current = intent.getActivityClass().getConstructor().newInstance();
+            current.setWindow(manager);
+            current.setIntent(intent);
+            current.onCreated();
             Activity before=top();
-            activityStack.push(activity);
-            activity.show();
             if(before!=null){
                 before.hidden();
             }
+            activityStack.push(current);
+            current.show();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             ErrorHandler.get().show(e);
         }
@@ -98,49 +96,62 @@ class ActivityManager {
 
     }
 
-    public void lunch(Intent intent){
+    public void lunch(WindowManager manager,Intent intent){
         similar.core.annotations.Activity info=findActivityInfo(intent);
         if(info==null){
             throw new RuntimeException("can not found this activity "+intent.getActivityClass());
         }
         if(info.lunchMode()==LaunchMode.SIGNAL_TOP){
-            pushActivityBySingleTop(intent);
+            pushActivityBySingleTop(manager,intent);
         }else if(info.lunchMode()==LaunchMode.SIGNAL_TASK){
-            pushActivityBySingleTask(intent);
+            pushActivityBySingleTask(manager,intent);
         }else {
-            pushActivityByStandard(intent);
+            pushActivityByStandard(manager,intent);
         }
     }
 
-    private void pushActivityBySingleTask(Intent intent){
+    /**
+     * 单例启动模式，该模式下如果栈内存在要启动的Activity则将该Activity之上的所有Activity通通出栈，
+     * 在显示Activity,若不存在则转为标准启动模式
+     */
+    private void pushActivityBySingleTask(WindowManager manager,Intent intent){
         Class<? extends Activity> activityClass= intent.getActivityClass();
         int index=findActivity(activityClass);
         if(index==-1){
-            pushActivityByStandard(intent);
+            pushActivityByStandard(manager,intent);
         }else {
             //从当前Activity界面移出然后新的界面加入
-            for (int i=activityStack.size()-1;i>index;i--)pop();
+            for (int i=activityStack.size()-1;i>index;i--)
+                pop();
             Activity activity=activityStack.get(index);
+            activity.show();
             activity.onNewIntent(intent);
+
         }
     }
 
-    private void pushActivityBySingleTop(Intent intent){
+
+    /**
+     * 栈顶启动模式，该模式下若要启动的Activity存在于栈顶则，则显示此Activity
+     * 若不存在则转为标准模式
+     */
+    private void pushActivityBySingleTop(WindowManager manager,Intent intent){
         Class<? extends Activity> activityClass= intent.getActivityClass();
         Activity topActivity=top();
         if(topActivity.isSame(activityClass)){
             topActivity.onNewIntent(intent);
         }else {
-            pushActivityByStandard(intent);
+            pushActivityByStandard(manager,intent);
         }
     }
 
-    public void pop(){
+    private void pop(){
         if(activityStack.isEmpty()){
             return;
         }
         Activity activity=activityStack.pop();
-        activity.onStop();
+        if(activity.isShow())
+            activity.hidden();
         activity.onDestroy();
     }
 
@@ -163,17 +174,26 @@ class ActivityManager {
         return -1;
     }
 
-    public void remove(Activity activity){
-        activityStack.removeElement(activity);
-        activity.onStop();
-        activity.onDestroy();
-        Activity top=top();
-        if(top==null){
-            windowManager.closeWindow();
+    public void finishActivity(Activity activity){
+        //当前正在显示的Activity
+        Activity current=activityStack.peek();
+        if(current==activity){
+            //出栈
+            activityStack.pop();
+            activity.hidden();
+            activity.onDestroy();
+            //获取新的Activity显示
+            Activity top=top();
+            if(top!=null&&!top.isShow()){
+                top.show();
+            }
         }else {
-            top.show();
-
+            boolean success=activityStack.removeElement(activity);
+            if(success){
+                activity.onDestroy();
+            }
         }
+
     }
 
     public similar.core.annotations.Activity findActivityInfo(Intent intent){

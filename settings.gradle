@@ -1,4 +1,4 @@
 rootProject.name = 'SimilarAndroid'
-include 'similar'
+include 'androidFx'
 include 'sample'
 
