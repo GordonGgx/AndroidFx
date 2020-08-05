@@ -1,7 +1,6 @@
 package similar.core;
 
-import similar.core.annotations.Activity;
-import similar.core.window.WindowManager;
+import similar.core.broadcast.LocalBroadcastManager;
 import similar.data.Intent;
 
 import java.io.File;
@@ -19,5 +18,13 @@ public abstract class Context {
      public void startActivity(Intent intent){
          ActivityManager activityManager=ActivityManager.instance();
          activityManager.lunch(new WindowManager(),intent);
+     }
+
+     public Context getApplicationContext(){
+         return AndroidApplication.instance();
+     }
+
+     public void sendBroadcast(Intent intent){
+         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
      }
 }

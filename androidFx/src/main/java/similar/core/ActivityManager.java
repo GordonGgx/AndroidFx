@@ -1,6 +1,5 @@
 package similar.core;
 
-import similar.core.window.WindowManager;
 import similar.data.Intent;
 import similar.util.ErrorHandler;
 
@@ -190,6 +189,8 @@ class ActivityManager {
         }else {
             boolean success=activityStack.removeElement(activity);
             if(success){
+                if(activity.isShow())
+                    activity.hidden();
                 activity.onDestroy();
             }
         }

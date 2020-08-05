@@ -3,10 +3,8 @@ package similar.core;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import similar.core.annotations.Preloader;
-import similar.core.window.WindowManager;
 import similar.data.Intent;
 import similar.util.ErrorHandler;
 

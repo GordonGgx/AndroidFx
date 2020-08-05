@@ -25,6 +25,7 @@ public class MainActivity extends Activity {
         super.onCreated();
         btn.setOnAction(event -> {
             startActivity(new Intent(SecondActivity.class));
+            finish();
         });
 //        Path path=new Path();
 //        path.getElements().add(new MoveTo(20,20));

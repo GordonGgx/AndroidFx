@@ -15,7 +15,8 @@ public class SecondActivity extends Activity {
         System.out.println("Second Act onCreated");
         Button btn=findViewById("btn");
         btn.setOnAction(event -> {
-            startActivity(new Intent(MainActivity.class));
+//            startActivity(new Intent(MainActivity.class));
+            finish();
         });
 
     }

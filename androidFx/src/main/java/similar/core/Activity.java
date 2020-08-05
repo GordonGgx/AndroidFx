@@ -1,20 +1,16 @@
 package similar.core;
 
-import javafx.animation.FadeTransition;
-import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import javafx.util.Duration;
 import similar.core.annotations.Layout;
-import similar.core.window.WindowManager;
 import similar.data.Intent;
 import similar.util.ErrorHandler;
 
+import java.awt.*;
 import java.io.IOException;
 
 public class Activity extends Context implements ILifecycle{
@@ -157,9 +153,16 @@ public class Activity extends Context implements ILifecycle{
 
     void hidden(){
         windowManager.closeWindow();
+
     }
 
     public Scene getScene() {
         return mScene;
     }
+
+
+//    static class ActionBar{
+//        private Window
+//    }
+
 }

@@ -8,7 +8,7 @@ import java.util.Map;
 
 public final class Intent {
 
-
+    private String mAction;
     private Map<String,Object> mMap=null;
 
     private Class<? extends Activity> aClass;
@@ -68,6 +68,14 @@ public final class Intent {
         isNullCreated();
         mMap.put(key,value);
         return this;
+    }
+
+    public String getAction() {
+        return mAction;
+    }
+
+    public void setAction(String action) {
+        this.mAction = action;
     }
 
     public Class<? extends Activity> getActivityClass(){

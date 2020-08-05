@@ -1,13 +1,10 @@
-package similar.core.window;
+package similar.core;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import similar.core.Activity;
-import similar.core.AndroidApplication;
-import similar.core.ILifecycle;
 
 /**
  * 窗口管理器
@@ -40,8 +37,6 @@ public class WindowManager {
         stage.setOnShown(event -> lifecycle.onResume());
         stage.setOnHiding(event -> lifecycle.onPause());
         stage.setOnHidden(event -> lifecycle.onStop());
-
-
 
     }
     public WindowManager(){
@@ -77,6 +72,7 @@ public class WindowManager {
     }
 
     public void attachToWindow(Activity activity){
+
         stage.setScene(activity.getScene());
         stage.show();
         FadeTransition fade=new FadeTransition(Duration.millis(1000),activity.getScene().getRoot());

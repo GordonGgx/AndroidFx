@@ -9,7 +9,7 @@ import similar.util.Utils;
  * 应用程序接口
  * 每一个应用程序都应该实现此接口
  */
-public abstract class AndroidApplication {
+public abstract class AndroidApplication extends Context{
 
     private static AndroidApplication app;
     private String icon;
