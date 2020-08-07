@@ -11,11 +11,17 @@ public final class Intent {
     private String mAction;
     private Map<String,Object> mMap=null;
 
-    private Class<? extends Activity> aClass;
+    private ComponentName mComponentName;
 
     public Intent(Class<? extends Activity> launch){
-        this.aClass=launch;
+        mComponentName=new ComponentName(launch);
     }
+
+    public Intent(String action){
+        setAction(action);
+    }
+
+
 
     public Intent putStringExtra(String key, String value){
         isNullCreated();
@@ -78,10 +84,13 @@ public final class Intent {
         this.mAction = action;
     }
 
-    public Class<? extends Activity> getActivityClass(){
-        return aClass;
+    public ComponentName getComponentName() {
+        return mComponentName;
     }
 
+    public void setComponentName(ComponentName mComponentName) {
+        this.mComponentName = mComponentName;
+    }
 
     private void isNullCreated(){
         if (mMap==null){

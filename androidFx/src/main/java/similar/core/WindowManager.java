@@ -5,6 +5,7 @@ import javafx.animation.Interpolator;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import similar.core.log.Log;
 
 /**
  * 窗口管理器
@@ -16,6 +17,8 @@ public class WindowManager {
 
 
     private ILifecycle lifecycle;
+
+    private boolean isCloseButtonClicked;
 
     public WindowManager(Stage stage){
         AndroidApplication application = AndroidApplication.instance();
@@ -33,10 +36,19 @@ public class WindowManager {
             }
         });
 
+        stage.setOnCloseRequest(event -> {
+            isCloseButtonClicked=true;
+        });
+
         this.stage.setOnShowing(event -> lifecycle.onStart());
         stage.setOnShown(event -> lifecycle.onResume());
         stage.setOnHiding(event -> lifecycle.onPause());
-        stage.setOnHidden(event -> lifecycle.onStop());
+        stage.setOnHidden(event -> {
+            lifecycle.onStop();
+            if(isCloseButtonClicked){
+                lifecycle.onDestroy();
+            }
+        });
 
     }
     public WindowManager(){
@@ -89,5 +101,9 @@ public class WindowManager {
 
     public boolean isShowing(){
         return stage.isShowing();
+    }
+
+    public boolean isCloseButtonClicked() {
+        return isCloseButtonClicked;
     }
 }

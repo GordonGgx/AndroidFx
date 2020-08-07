@@ -5,6 +5,7 @@ import similar.data.Intent;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Objects;
 
 public abstract class Context {
 
@@ -16,6 +17,7 @@ public abstract class Context {
 
 
      public void startActivity(Intent intent){
+         Objects.requireNonNull(intent.getComponentName(),"无法启动Activity，缺少组建信息");
          ActivityManager activityManager=ActivityManager.instance();
          activityManager.lunch(new WindowManager(),intent);
      }

@@ -21,6 +21,7 @@ import similar.core.LaunchMode;
 import similar.core.annotations.Activity;
 import similar.core.annotations.Application;
 import similar.core.log.Log;
+import similar.data.Intent;
 
 import java.awt.*;
 import java.io.File;
@@ -46,7 +47,7 @@ public class App extends AndroidApplication {
     }
 
     public static void main(String[] args)  {
-        Log.d("开始启动");
+        Log.d("开始启动"+App.class.getTypeName());
         try {
             launch(new App(),args);
         } catch (Exception e) {

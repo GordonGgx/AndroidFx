@@ -8,32 +8,11 @@ import java.util.logging.Logger;
 
 public final class Log {
 
-    /**
-     * Priority constant for the println method; use Log.d.
-     */
-    public static final int DEBUG = 3;
+    private static final Level INFO=Level.INFO;
+    private static final Level DEBUG=new LogLevel("Debug",802);
+    private static final Level WARNING=Level.WARNING;
+    private static final Level ERROR=new LogLevel("Error",804);
 
-    /**
-     * Priority constant for the println method; use Log.i.
-     */
-    public static final int INFO = 4;
-
-    /**
-     * Priority constant for the println method; use Log.w.
-     */
-    public static final int WARN = 5;
-
-    public static final Level test=new LogLevel("demo",801);
-
-    /**
-     * Priority constant for the println method; use Log.e.
-     */
-    public static final int ERROR = 6;
-
-    /**
-     * Priority constant for the println method.
-     */
-    public static final int ASSERT = 7;
 
     private Log() {
     }
@@ -43,7 +22,7 @@ public final class Log {
      * Send a {@link #DEBUG} log message..
      * @param msg The message you would like logged.
      */
-    public static void d(String msg) {
+    public static void d(Object msg) {
         println( DEBUG, msg);
     }
 
@@ -52,15 +31,15 @@ public final class Log {
      * @param msg The message you would like logged.
      * @param tr An exception to log
      */
-    public static void d( String msg, Throwable tr) {
-        println( DEBUG,msg + '\n' + getStackTraceString(tr));
+    public static void d( Object msg, Throwable tr) {
+        println( DEBUG,msg + "\n" + getStackTraceString(tr));
     }
 
     /**
      * Send an {@link #INFO} log message.
      * @param msg The message you would like logged.
      */
-    public static void i(String msg) {
+    public static void i(Object msg) {
          println(INFO, msg);
     }
 
@@ -69,25 +48,25 @@ public final class Log {
      * @param msg The message you would like logged.
      * @param tr An exception to log
      */
-    public static void i( String msg, Throwable tr) {
-         println( INFO, msg + '\n' + getStackTraceString(tr));
+    public static void i( Object msg, Throwable tr) {
+         println( INFO, msg + "\n" + getStackTraceString(tr));
     }
 
     /**
-     * Send a {@link #WARN} log message.
+     * Send a {@link #WARNING} log message.
      * @param msg The message you would like logged.
      */
-    public static void w( String msg) {
-         println( WARN, msg);
+    public static void w( Object msg) {
+         println( WARNING, msg);
     }
 
     /**
-     * Send a {@link #WARN} log message and log the exception.
+     * Send a {@link #WARNING} log message and log the exception.
      * @param msg The message you would like logged.
      * @param tr An exception to log
      */
-    public static void w( String msg, Throwable tr) {
-         println( WARN, msg + '\n' + getStackTraceString(tr));
+    public static void w( Object msg, Throwable tr) {
+         println( WARNING, msg + "\n" + getStackTraceString(tr));
     }
 
     /*
@@ -97,14 +76,14 @@ public final class Log {
      * @param tr An exception to log
      */
     public static void w( Throwable tr) {
-         println( WARN, getStackTraceString(tr));
+         println( WARNING, getStackTraceString(tr));
     }
 
     /**
      * Send an {@link #ERROR} log message.
      * @param msg The message you would like logged.
      */
-    public static void e( String msg) {
+    public static void e( Object msg) {
          println( ERROR, msg);
     }
 
@@ -113,8 +92,8 @@ public final class Log {
      * @param msg The message you would like logged.
      * @param tr An exception to log
      */
-    public static void e( String msg, Throwable tr) {
-         println( ERROR, msg + '\n' + getStackTraceString(tr));
+    public static void e( Object msg, Throwable tr) {
+         println( ERROR, msg + "\n" + getStackTraceString(tr));
     }
 
     /**
@@ -149,10 +128,10 @@ public final class Log {
      * @param msg The message you would like logged.
      * @return The number of bytes written.
      */
-    private static void println(int priority, String msg) {
+    private static void println(Level priority, Object msg) {
         Logger logger=Logger.getGlobal();
         StackTraceElement[] mStacks = Thread.currentThread().getStackTrace();
         var ste=mStacks[3];
-        logger.logp(Level.INFO,ste.getClassName(), ste.getMethodName(),"at "+ste+"\n"+msg);
+        logger.logp(priority,ste.getClassName(), ste.getMethodName(),"at "+ste+"\n"+(msg==null?"null":msg.toString()));
     }
 }

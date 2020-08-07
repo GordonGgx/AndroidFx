@@ -1,9 +1,9 @@
 package similar.core;
 
+import similar.data.ComponentName;
 import similar.data.Intent;
 import similar.util.ErrorHandler;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -15,6 +15,7 @@ class ActivityManager {
 
     private volatile static ActivityManager instance;
 
+    private final ActivityLoader activityLoader=new ActivityLoader();
     //记录应用中所有Activity的信息
     private final List<similar.core.annotations.Activity> activityInfo;
 
@@ -77,28 +78,25 @@ class ActivityManager {
      * 如果存在上一个Activity则隐藏上一个Activity
      */
     private void pushActivityByStandard(WindowManager manager,Intent intent){
-        try {
-            Activity current = intent.getActivityClass().getConstructor().newInstance();
-            current.setWindow(manager);
-            current.setIntent(intent);
-            current.onCreated();
-            Activity before=top();
-            if(before!=null){
-                before.hidden();
-            }
-            activityStack.push(current);
-            current.show();
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            ErrorHandler.get().show(e);
-        }
-
+        ComponentName componentName=intent.getComponentName();
+        Activity current = activityLoader.newActivity(componentName);
+        current.setWindow(manager);
+        current.setIntent(intent);
+        current.onCreated();
+//        Activity before=top();
+////        if(before!=null){
+////            before.hidden();
+////        }
+        activityStack.push(current);
+        current.show();
 
     }
 
     public void lunch(WindowManager manager,Intent intent){
         similar.core.annotations.Activity info=findActivityInfo(intent);
+        ComponentName componentName=intent.getComponentName();
         if(info==null){
-            throw new RuntimeException("can not found this activity "+intent.getActivityClass());
+            throw new RuntimeException("can not found this activity info at "+componentName.getCompleteName());
         }
         if(info.lunchMode()==LaunchMode.SIGNAL_TOP){
             pushActivityBySingleTop(manager,intent);
@@ -114,16 +112,17 @@ class ActivityManager {
      * 在显示Activity,若不存在则转为标准启动模式
      */
     private void pushActivityBySingleTask(WindowManager manager,Intent intent){
-        Class<? extends Activity> activityClass= intent.getActivityClass();
+        Class<? extends Activity> activityClass= activityLoader.loadActivity(intent.getComponentName());
         int index=findActivity(activityClass);
         if(index==-1){
             pushActivityByStandard(manager,intent);
         }else {
-            //从当前Activity界面移出然后新的界面加入
+            //从栈顶的Activity界面移出然后新的界面加入
             for (int i=activityStack.size()-1;i>index;i--)
                 pop();
             Activity activity=activityStack.get(index);
-            activity.show();
+            if(!activity.isShow())
+                activity.show();
             activity.onNewIntent(intent);
 
         }
@@ -135,7 +134,7 @@ class ActivityManager {
      * 若不存在则转为标准模式
      */
     private void pushActivityBySingleTop(WindowManager manager,Intent intent){
-        Class<? extends Activity> activityClass= intent.getActivityClass();
+        Class<? extends Activity> activityClass= activityLoader.loadActivity(intent.getComponentName());
         Activity topActivity=top();
         if(topActivity.isSame(activityClass)){
             topActivity.onNewIntent(intent);
@@ -180,7 +179,8 @@ class ActivityManager {
             //出栈
             activityStack.pop();
             activity.hidden();
-            activity.onDestroy();
+            if(!activity.getWindowManager().isCloseButtonClicked())
+                activity.onDestroy();
             //获取新的Activity显示
             Activity top=top();
             if(top!=null&&!top.isShow()){
@@ -199,7 +199,7 @@ class ActivityManager {
 
     public similar.core.annotations.Activity findActivityInfo(Intent intent){
         for (var act:activityInfo){
-            if(act.name().getTypeName().equals(intent.getActivityClass().getTypeName())){
+            if(act.name().getTypeName().equals(intent.getComponentName().getCompleteName())){
                 return act;
             }
         }

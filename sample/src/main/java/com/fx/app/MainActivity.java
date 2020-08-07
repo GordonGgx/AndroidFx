@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.shape.Rectangle;
 import similar.core.Activity;
 import similar.core.annotations.Layout;
+import similar.core.log.Log;
 import similar.data.Intent;
 
 @Layout("layout/main.fxml")
@@ -20,12 +21,18 @@ public class MainActivity extends Activity {
 //    @FXML
 //    private ListView clv;
 
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        Log.i("触发了onNewIntent");
+    }
+
     @Override
     public void onCreated() {
         super.onCreated();
         btn.setOnAction(event -> {
-            startActivity(new Intent(SecondActivity.class));
-            finish();
+//            finish();
+            startActivity(new Intent(MainActivity.class));
         });
 //        Path path=new Path();
 //        path.getElements().add(new MoveTo(20,20));

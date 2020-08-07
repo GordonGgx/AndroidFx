@@ -12,8 +12,8 @@ import similar.util.Utils;
 public abstract class AndroidApplication extends Context{
 
     private static AndroidApplication app;
-    private String icon;
-    private String title;
+    private String icon="icon/ic_launcher_round.png";
+    private String title="app_Name";
     private String packageName;
 
     /**
