@@ -19,7 +19,7 @@ public abstract class Context {
      public void startActivity(Intent intent){
          Objects.requireNonNull(intent.getComponentName(),"无法启动Activity，缺少组建信息");
          ActivityManager activityManager=ActivityManager.instance();
-         activityManager.lunch(new WindowManager(),intent);
+         activityManager.lunch(new AppWindow(),intent);
      }
 
      public Context getApplicationContext(){

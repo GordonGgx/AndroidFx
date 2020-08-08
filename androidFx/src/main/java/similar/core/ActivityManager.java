@@ -77,7 +77,7 @@ class ActivityManager {
      * 将activity压入栈中
      * 如果存在上一个Activity则隐藏上一个Activity
      */
-    private void pushActivityByStandard(WindowManager manager,Intent intent){
+    private void pushActivityByStandard(AppWindow manager, Intent intent){
         ComponentName componentName=intent.getComponentName();
         Activity current = activityLoader.newActivity(componentName);
         current.setWindow(manager);
@@ -88,11 +88,13 @@ class ActivityManager {
 ////            before.hidden();
 ////        }
         activityStack.push(current);
+        //这里触发Window属性的变化
+        current.getWindow().onWindowAttributesChanged();
         current.show();
 
     }
 
-    public void lunch(WindowManager manager,Intent intent){
+    public void lunch(AppWindow manager, Intent intent){
         similar.core.annotations.Activity info=findActivityInfo(intent);
         ComponentName componentName=intent.getComponentName();
         if(info==null){
@@ -111,7 +113,7 @@ class ActivityManager {
      * 单例启动模式，该模式下如果栈内存在要启动的Activity则将该Activity之上的所有Activity通通出栈，
      * 在显示Activity,若不存在则转为标准启动模式
      */
-    private void pushActivityBySingleTask(WindowManager manager,Intent intent){
+    private void pushActivityBySingleTask(AppWindow manager, Intent intent){
         Class<? extends Activity> activityClass= activityLoader.loadActivity(intent.getComponentName());
         int index=findActivity(activityClass);
         if(index==-1){
@@ -133,7 +135,7 @@ class ActivityManager {
      * 栈顶启动模式，该模式下若要启动的Activity存在于栈顶则，则显示此Activity
      * 若不存在则转为标准模式
      */
-    private void pushActivityBySingleTop(WindowManager manager,Intent intent){
+    private void pushActivityBySingleTop(AppWindow manager, Intent intent){
         Class<? extends Activity> activityClass= activityLoader.loadActivity(intent.getComponentName());
         Activity topActivity=top();
         if(topActivity.isSame(activityClass)){
@@ -179,7 +181,7 @@ class ActivityManager {
             //出栈
             activityStack.pop();
             activity.hidden();
-            if(!activity.getWindowManager().isCloseButtonClicked())
+            if(!activity.getWindow().isCloseButtonClicked())
                 activity.onDestroy();
             //获取新的Activity显示
             Activity top=top();

@@ -27,7 +27,7 @@ public final class SimilarApplication extends javafx.application.Application {
             if(newValue){
                 Platform.runLater(()->{
                     similar.core.annotations.Activity mainActivity=ActivityManager.instance().getMainActivity();
-                    ActivityManager.instance().lunch(new WindowManager(primaryStage),
+                    ActivityManager.instance().lunch(new AppWindow(primaryStage),
                             new Intent(mainActivity.name()));
                 });
             }
@@ -41,7 +41,7 @@ public final class SimilarApplication extends javafx.application.Application {
             if(hasPreload){
                 notifyPreloader(new ApplicationNotification(this));
             }else {
-                ActivityManager.instance().lunch(new WindowManager(primaryStage),
+                ActivityManager.instance().lunch(new AppWindow(primaryStage),
                         new Intent(mainActivity.name()));
                 preloadReady.setValue(false);
             }

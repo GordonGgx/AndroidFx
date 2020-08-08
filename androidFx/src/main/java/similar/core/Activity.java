@@ -10,12 +10,11 @@ import similar.core.annotations.Layout;
 import similar.data.Intent;
 import similar.util.ErrorHandler;
 
-import java.awt.*;
 import java.io.IOException;
 
 public class Activity extends Context implements ILifecycle{
 
-    private WindowManager windowManager;
+    private Window appWindow;
 
     private Intent intent;
 
@@ -125,13 +124,13 @@ public class Activity extends Context implements ILifecycle{
     }
 
 
-    void setWindow(WindowManager manager){
-        windowManager=manager;
-        windowManager.setLifecycle(this);
+    void setWindow(Window manager){
+        appWindow =manager;
+        appWindow.setLifecycle(this);
     }
 
-    public WindowManager getWindowManager() {
-        return windowManager;
+    public Window getWindow() {
+        return appWindow;
     }
 
     /**
@@ -144,15 +143,15 @@ public class Activity extends Context implements ILifecycle{
     }
 
     public boolean isShow(){
-        return windowManager.isShowing();
+        return appWindow.isShowing();
     }
 
     void show(){
-        windowManager.attachToWindow(this);
+        appWindow.attachToWindow(this);
     }
 
     void hidden(){
-        windowManager.closeWindow();
+        appWindow.closeWindow();
 
     }
 

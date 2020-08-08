@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.shape.Rectangle;
 import similar.core.Activity;
+import similar.core.Window;
 import similar.core.annotations.Layout;
 import similar.core.log.Log;
 import similar.data.Intent;
@@ -30,9 +31,10 @@ public class MainActivity extends Activity {
     @Override
     public void onCreated() {
         super.onCreated();
+        getWindow().addFlags(Window.FLAG_NO_TITLE|Window.FLAG_FULL_SCREEN);
         btn.setOnAction(event -> {
-//            finish();
-            startActivity(new Intent(MainActivity.class));
+            finish();
+//            startActivity(new Intent(MainActivity.class));
         });
 //        Path path=new Path();
 //        path.getElements().add(new MoveTo(20,20));
