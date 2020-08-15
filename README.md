@@ -1,11 +1,14 @@
-# SimilarAndroid
+# AndroidFx
 简化JavaFx的开发过程，提供方便使用的组件。
+Api尽可能的模仿Android**
 
 ## Features
 1. 提供SimilarPreloader
-2. 提供SimilarApplication
-3. 提供Activity支持
-4. 异步任务支持，支持FX->work线程互相切换
+2. 提供AndroidApplication
+3. 提供Activity支持，支持Activity生命周期
+4. 提供本地广播（LocalBroadcast）
+5. 异步任务支持（Task），支持FX->work线程互相切换
+6. 提供盒子模型（Boxes），该类属于一个学习haskell过程中的玩具类，实现了如何在Java中使用Monad的编程风格，可以学习参考
 
 ## TODO
 1. 数据持久化支持
