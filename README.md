@@ -1,4 +1,8 @@
 # AndroidFx
+
+[![](https://jitpack.io/v/GordonGgx/AndroidFx.svg)](https://jitpack.io/#GordonGgx/AndroidFx)
+
+
 简化JavaFx的开发过程，提供方便使用的组件。
 Api尽可能的模仿Android**
 
@@ -15,6 +19,20 @@ Api尽可能的模仿Android**
 2. 更多的方便控件
 3. 场景切换动画支持
 4. Service 支持
+
+## 使用方式
+```groovy
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+dependencies {
+        implementation 'com.github.GordonGgx:AndroidFx:Tag'
+}
+```
 
 ## Requirements
 本框架建立于JDK14的基础上，作为客户端GUI请不要吝啬你的JDK版本
